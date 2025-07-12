@@ -1,41 +1,98 @@
 # 🧭 Arrow Orientation and Angle Detection using OpenCV
 
-This project detects **arrows** in real-time using your webcam feed and analyzes their **orientation** (UP, DOWN, LEFT, RIGHT) and **angle** (in degrees). It is built using Python and OpenCV and designed for practical use in navigation, robotics, and visual input systems.
+This project uses a webcam feed to **detect arrows in real-time** and analyze their:
+- **Orientation** (UP, DOWN, LEFT, RIGHT)
+- **Angle** (in degrees from the horizontal)
+
+Built with **Python** and **OpenCV**, this system can assist in applications such as:
+- Robotics navigation
+- Visual indicators for automation
+- Interactive computer vision systems
+- STEM and image processing education
 
 ---
 
-## 📌 Features
+## 📌 Features (Detailed)
 
-- Real-time arrow detection from a webcam
-- Calculates:
-  - **Arrow orientation** (UP/DOWN/LEFT/RIGHT)
-  - **Angle in degrees**
-- Annotates detected arrows on the video frame
-- Shows both original and white-background visualization
-- Uses **contour analysis**, **Canny edge detection**, and **image moments**
+- ✅ **Live Webcam Arrow Detection**: Continuously monitors frames for arrow-like shapes.
+- ✅ **Arrow Orientation Detection**: Identifies whether the arrow points **UP**, **DOWN**, **LEFT**, or **RIGHT** using geometric analysis.
+- ✅ **Angle Calculation**: Computes the angle (in degrees) between the arrowhead and centroid, useful for fine-grained navigation or alignment.
+- ✅ **Visual Annotation**: 
+  - Detected arrows are outlined on the frame.
+  - Arrowhead and center are marked with color-coded circles.
+  - Angle and orientation labels are overlaid for real-time feedback.
+- ✅ **Dual Frame Display**:
+  - **Original Frame** with annotations
+  - **White Background View** with only the arrow for clean visualization
+- ✅ **Smoothing**: Arrowhead and centroid coordinates are smoothed using a moving average for stable angle readings.
+- ✅ **Techniques Used**:
+  - Canny edge detection
+  - Contour analysis
+  - Image moments
+  - Vector math (Euclidean distance & angle calculation)
 
 ---
 
-## 🧠 Working Principle
+## 🧠 Working Principle (Step-by-Step)
 
-### 1. **Image Preprocessing**
-- **Grayscale conversion**: Simplifies image
-- **Gaussian blur**: Reduces noise
-- **Canny edge detection**: Detects edges
-
-### 2. **Contour Detection**
-- Finds external contours (possible arrows)
-- Filters small/noisy contours
-
-### 3. **Feature Extraction**
-- **Centroid**: Calculated using image moments
-- **Arrowhead**: The farthest point from the centroid
+### 1️⃣ Image Preprocessing
+- **Grayscale Conversion**  
+  - Converts the webcam image from color to grayscale using `cv2.cvtColor()`  
+  - Removes color noise and simplifies processing
   
-### 4. **Orientation and Angle**
-- Orientation is inferred by comparing `arrowhead - center` vector
-- Angle calculated using:
-  ```python
-  angle = -math.degrees(math.atan2(dy, dx))
+- **Gaussian Blur**  
+  - Applies blur using `cv2.GaussianBlur()` to reduce high-frequency noise  
+  - Helps improve edge clarity
+
+- **Canny Edge Detection**  
+  - Detects edges using `cv2.Canny()`  
+  - Highlights arrow boundaries for contour detection
+
+---
+
+### 2️⃣ Contour Detection
+- Uses `cv2.findContours()` to detect shapes in the edge-detected image
+- Filters out small contours with area `< 1000` to ignore noise
+- Keeps large shapes likely to be arrows
+
+---
+
+### 3️⃣ Feature Extraction
+
+- **Centroid Calculation**  
+  - Uses image moments: `cv2.moments()`  
+  - Centroid = geometric center of contour (i.e., the arrow body)
+
+- **Arrowhead Detection**  
+  - Finds the **farthest point** from the centroid using:
+    ```python
+    np.linalg.norm(np.array(p) - np.array(center))
+    ```
+  - This point is assumed to be the arrowhead (the tip)
+
+---
+
+### 4️⃣ Orientation & Angle Analysis
+
+- **Orientation Detection**
+  - Compares the direction of the arrowhead relative to the centroid
+  - Logic:
+    ```python
+    dx, dy = arrowhead - center
+    if abs(dx) > abs(dy):
+        direction = 'RIGHT' if dx > 0 else 'LEFT'
+    else:
+        direction = 'UP' if dy < 0 else 'DOWN'
+    ```
+
+- **Angle Calculation**
+  - Measures the angle between the arrowhead-center line and horizontal axis:
+    ```python
+    angle = -math.degrees(math.atan2(dy, dx))
+    ```
+  - Produces angle in range `[-180°, 180°)`
+
+---
 
 
 ## 📷 Demo
