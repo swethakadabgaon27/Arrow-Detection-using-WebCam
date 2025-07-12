@@ -16,14 +16,6 @@ This project detects **arrows** in real-time using your webcam feed and analyzes
 
 ---
 
-## 📷 Demo
-
-<img width="374" height="297" alt="image" src="https://github.com/user-attachments/assets/1f94d15f-4dd5-41c0-bc34-79e0f0167775" />
-<img width="365" height="293" alt="image" src="https://github.com/user-attachments/assets/cde16dc2-96e8-4dba-b8fd-ece3841aa8d9" />
-<img width="371" height="294" alt="image" src="https://github.com/user-attachments/assets/1779f8df-8645-45a5-9cd1-dbd14b0df9ce" />
-<img width="363" height="298" alt="image" src="https://github.com/user-attachments/assets/33a05056-7015-432e-bac3-63f4e4de7d10" />
-
-
 ## 🧠 Working Principle
 
 ### 1. **Image Preprocessing**
@@ -38,9 +30,17 @@ This project detects **arrows** in real-time using your webcam feed and analyzes
 ### 3. **Feature Extraction**
 - **Centroid**: Calculated using image moments
 - **Arrowhead**: The farthest point from the centroid
-
+  
 ### 4. **Orientation and Angle**
 - Orientation is inferred by comparing `arrowhead - center` vector
 - Angle calculated using:
   ```python
   angle = -math.degrees(math.atan2(dy, dx))
+
+
+## 📷 Demo
+
+<img width="374" height="297" alt="image" src="https://github.com/user-attachments/assets/1f94d15f-4dd5-41c0-bc34-79e0f0167775" />
+<img width="365" height="293" alt="image" src="https://github.com/user-attachments/assets/cde16dc2-96e8-4dba-b8fd-ece3841aa8d9" />
+<img width="371" height="294" alt="image" src="https://github.com/user-attachments/assets/1779f8df-8645-45a5-9cd1-dbd14b0df9ce" />
+<img width="363" height="298" alt="image" src="https://github.com/user-attachments/assets/33a05056-7015-432e-bac3-63f4e4de7d10" />
